@@ -15,18 +15,11 @@
  */
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        List<Integer> list=new ArrayList<>();
-        inOrder(root,list);
-        for(int i=0;i<list.size()-1;i++){
-            if(list.get(i)>=list.get(i+1)) return false;
-        }
-        return true;
+        return f(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
-
-    public void inOrder(TreeNode root,List<Integer> inorder){
-        if(root==null) return;
-        inOrder(root.left,inorder);
-        inorder.add(root.val);
-        inOrder(root.right,inorder);
+    public boolean f(TreeNode root, long low, long high) {
+        if (root == null) return true;
+        if (root.val >= high || root.val <= low) return false;
+        return f(root.left, low, root.val) && f(root.right, root.val, high);
     }
 }
