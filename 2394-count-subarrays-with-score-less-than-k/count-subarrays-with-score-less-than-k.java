@@ -1,20 +1,20 @@
 class Solution {
     public long countSubarrays(int[] nums, long k) {
-        int n = nums.length;
-        int left = 0;
-        long sum = 0;
-        long count = 0;  // Make count long because number of subarrays can be large
+        
+        long total =0 ;
+        long count=0;
+        for (int start=0,end =0 ; end <nums.length;end++){
 
-        for (int right = 0; right < n; right++) {
-            sum += nums[right];
+            total += nums[end];
 
-            while (left <= right && sum * (right - left + 1) >= k) {
-                sum -= nums[left];
-                left++;
+            while (start<=end && total*(end-start+1)>=k){
+                total -=nums[start];
+                start++;
             }
+            count += end -start+1;
 
-            count += (right - left + 1);
         }
         return count;
+
     }
 }
