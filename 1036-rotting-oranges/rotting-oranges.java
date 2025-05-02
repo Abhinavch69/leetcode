@@ -1,49 +1,69 @@
-class Pair{
-    int first,second,tm;
-    public Pair(int f, int s, int t){
-        first=f;second=s;tm=t;
-    }
-}
+        class Solution {
 
-class Solution {
+    class Pair {
+        int r;
+        int c;
+        int t;
+
+        Pair(int r, int c, int t) {
+            this.r = r;
+            this.c = c;
+            this.t = t;
+        }
+    }
+
     public int orangesRotting(int[][] grid) {
-        int n=grid.length;
-        int m=grid[0].length;
-        int[][] vis=new int[n][m];
-        Queue<Pair> q=new LinkedList<>();
-        int cntFresh=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==2){
-                    vis[i][j]=2;
-                    q.add(new Pair(i,j,0));
-                }else{
-                    vis[i][j]=0;
+
+        int m = grid.length, n = grid[0].length;
+
+        // dfs
+        Queue<Pair> q = new LinkedList<>();
+        int freshCount = 0;
+
+        // level 1 rotten oranges
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                // rotton
+                if (grid[i][j] == 2) {
+                    q.add(new Pair(i, j, 0));
                 }
-                if(grid[i][j]==1) cntFresh++;
-            }
-        }
-        int cnt=0;
-        int tm=0;
-        int[] delRow={-1,0,1,0};
-        int[] delCol={0,1,0,-1};
-        while(!q.isEmpty()){
-            int r=q.peek().first;
-            int c=q.peek().second;
-            int t=q.peek().tm;
-            q.remove();
-            tm=Math.max(t,tm);
-            for(int i=0;i<4;i++){
-                int ro=r+delRow[i];
-                int co=c+delCol[i];
-                if(ro>=0 && ro<n && co>=0 && co<m && vis[ro][co]==0 && grid[ro][co]==1){
-                    q.add(new Pair(ro,co,t+1));
-                    vis[ro][co]=2;
-                    cnt++;
+                else if(grid[i][j] == 1) {
+                    freshCount ++;
                 }
             }
         }
-        if(cnt!=cntFresh) return -1;
-        return tm;
+
+        int[] rows = { -1, 0, 1, 0 };
+        int[] cols = { 0, 1, 0, -1 };
+
+        int time = 0;
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            int row = p.r;
+            int col = p.c;
+            int t = p.t;
+
+            // to track the correct time
+            time = Math.max(time, t);
+
+            for(int i = 0; i < 4; i++)
+            {
+                int r = rows[i] + row;
+                int c = cols[i] + col;
+
+                if(r >= 0 && r < m && c >= 0 && c < n)
+                {
+                    if(grid[r][c] == 1)
+                    {
+                        // make fresh to rotten
+                        grid[r][c] = 2;
+                        q.add(new Pair(r, c, t + 1));
+                        freshCount --;
+                    }
+                }
+            }
+        }
+
+        return freshCount != 0? -1 : time;
     }
 }
