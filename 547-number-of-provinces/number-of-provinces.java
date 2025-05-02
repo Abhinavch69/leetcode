@@ -24,7 +24,7 @@ class Solution {
                 }
             }
         }
-        int vis[] =new int[n+1];
+        int vis[] =new int[n];
         int cnt=0;
         for(int i=0;i<n;i++){
             if(vis[i]==0){
